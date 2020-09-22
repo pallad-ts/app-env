@@ -1,0 +1,32 @@
+{
+  "name": "@pallad/app-env",
+  "version": "1.0.0",
+  "description": "",
+  "main": "compiled/index.js",
+  "types": "compiled/index.d.ts",
+  "scripts": {
+    "compile": "pallad-scripts compile",
+    "test": "pallad-scripts test",
+    "lint": "pallad-scripts lint"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/pallad-ts/app-env.git"
+  },
+  "files": [
+    "compiled"
+  ],
+  "author": "Łukasz Kużyński <lukasz.kuzynski@gmail.com> (http://wookieb.pl)",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/pallad-ts/app-env/issues"
+  },
+  "homepage": "https://github.com/pallad-ts/app-env#readme",
+  "devDependencies": {
+    "@pallad/scripts": "^1.1.4",
+    "@types/jest": "^24.9.1",
+    "@types/node": "^14.11.2",
+    "@types/sinon": "^7.5.2",
+    "sinon": "^7.5.0"
+  }
+}
