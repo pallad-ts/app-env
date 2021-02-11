@@ -1,7 +1,7 @@
 import {Env} from "./Env";
 
 export function getEnvNameFromProcess(env = process.env, keys: string[] = ['APP_ENV', 'NODE_ENV']): Env {
-    const candidate = (() => {
+    const candidate: string | undefined = (() => {
         for (const envName of keys) {
             if (env[envName]) {
                 return env[envName];
@@ -10,13 +10,12 @@ export function getEnvNameFromProcess(env = process.env, keys: string[] = ['APP_
     })();
 
     if (candidate === undefined) {
-        return Env.DEVELOPMENT;
+        return 'development'
     }
 
-    const values = Object.values(Env) as string[];
-    if (values.includes(candidate.trim().toLowerCase())) {
+    if (Env.List.includes(candidate.trim().toLowerCase() as any)) {
         return candidate as Env;
     }
 
-    return Env.DEVELOPMENT;
+    return 'development';
 }
