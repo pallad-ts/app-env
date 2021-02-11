@@ -18,7 +18,7 @@ describe('getEnvNameFromProcess', () => {
 
     it('using provided keys', () => {
         const env = {
-            APP_ENV: Env.TESTING,
+            APP_ENV: Env.TEST,
             NODE_ENV: Env.PRODUCTION
         };
 
@@ -41,7 +41,7 @@ describe('getEnvNameFromProcess', () => {
                 APP_ENV: Env.STAGING
             };
         });
-        
+
         afterAll(() => {
             process.env = env;
         });
