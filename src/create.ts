@@ -8,52 +8,31 @@ export function create(env: Env): Info {
     };
 
     const forEnv = (...names: Env[]) => {
-        return <T>(value: T) => {
+        const func: Info.ValueGetter = (value: any, defaultValue?: any) => {
             if (is(...names)) {
                 return value
             }
+            return defaultValue;
         };
+        return func;
     };
-
-    const forOtherThan = (...names: Env[]) => {
-        return <T>(value: T) => {
-            if (!is(...names)) {
-                return value;
-            }
-        }
-    }
 
     const info = {
         name: env,
         isTest: env === 'test',
         isProduction: env === 'production',
         isStaging: env === 'staging',
+        isCI: env === 'ci',
         isDevelopment: env === 'development',
         forEnv,
-        build: <T>(): Builder<T> => {
-            return new Builder(info);
-        },
-        forOtherThan,
-        forEnvOtherThan: forOtherThan,
-        forEnvMap<T>(map: Info.EnvMap<T>): T | undefined {
-            for (const envName of Env.List) {
-                if (envName in map && env === envName) {
-                    return map[envName];
-                }
-            }
-
-            if ('default' in map) {
-                return map.default;
-            }
+        build: () => {
+            return Builder.create(info);
         },
         forDevelopment: forEnv('development'),
-        forOtherThanDevelopment: forOtherThan('development'),
         forProduction: forEnv('production'),
-        forOtherThanProduction: forOtherThan('production'),
         forStaging: forEnv('staging'),
-        forOtherThanStaging: forOtherThan('staging'),
         forTest: forEnv('test'),
-        forOtherThanTest: forOtherThan('test'),
+        forCI: forEnv('ci'),
         is,
         isEnv: is
     };

@@ -1,4 +1,5 @@
 import {Env} from "./Env";
+import {isCI} from './isCI';
 
 export function getEnvNameFromProcess(env = process.env, keys: string[] = ['APP_ENV', 'NODE_ENV']): Env {
     const candidate: string | undefined = (() => {
@@ -10,6 +11,9 @@ export function getEnvNameFromProcess(env = process.env, keys: string[] = ['APP_
     })();
 
     if (candidate === undefined) {
+        if (isCI(env)) {
+            return 'ci';
+        }
         return 'development'
     }
 

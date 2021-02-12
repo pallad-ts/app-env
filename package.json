@@ -1,6 +1,6 @@
 {
   "name": "@pallad/app-env",
-  "version": "2.1.0",
+  "version": "3.0.0",
   "description": "",
   "main": "compiled/index.js",
   "types": "compiled/index.d.ts",
@@ -25,12 +25,15 @@
   "homepage": "https://github.com/pallad-ts/app-env#readme",
   "devDependencies": {
     "@pallad/scripts": "^1.1.4",
+    "@types/ci-info": "^2.0.0",
     "@types/jest": "^24.9.1",
     "@types/node": "^14.11.2",
     "@types/sinon": "^7.5.2",
+    "conditional-type-checks": "^1.0.5",
     "sinon": "^7.5.0"
   },
   "dependencies": {
+    "ci-info": "^2.0.0",
     "ts-essentials": "^7.0.1"
   }
 }

@@ -1,12 +1,14 @@
 import {Env} from "@src/Env";
 import {create} from "@src/create";
 import {Info} from '@src/Info';
+import {assert, IsExact} from 'conditional-type-checks';
 
 describe('create', () => {
     const PRODUCTION = create('production');
     const DEVELOPMENT = create('development');
     const TEST = create('test');
     const STAGING = create('staging');
+    const CI = create('ci');
 
     it.each<[Env, { [key: string]: boolean }]>([
         ['staging', {isStaging: true}],
@@ -30,42 +32,25 @@ describe('create', () => {
             .toEqual(true);
     });
 
-    const VALUE = 'FOO';
-    const VALUE_2 = 'BAR';
+    const VALUE = 'FOO' as const;
+    const VALUE_2 = 'BAR' as const;
 
-    it('forEnv returns value only for given environments', () => {
-        expect(PRODUCTION.forEnv('production')(VALUE)).toEqual(VALUE);
-        expect(DEVELOPMENT.forEnv('production')(VALUE)).toBeUndefined();
-    });
+    describe.each<[Info, Info]>([
+        [PRODUCTION, DEVELOPMENT],
+        [DEVELOPMENT, PRODUCTION],
+        [TEST, DEVELOPMENT],
+        [STAGING, DEVELOPMENT],
+        [CI, DEVELOPMENT]
+    ])('forEnv returns value only for given environment', (env, oppositeEnv) => {
 
-    describe('forEnvMap', () => {
-        it('no default', () => {
-            const map: Info.EnvMap<any> = {
-                production: VALUE
-            };
-
-            expect(PRODUCTION.forEnvMap(map)).toEqual(VALUE);
-            expect(DEVELOPMENT.forEnvMap(map)).toBeUndefined();
+        it('uses provided value if matches env', () => {
+            expect(env.forEnv(env.name)(VALUE)).toEqual(VALUE);
+            expect(oppositeEnv.forEnv(env.name)(VALUE)).toBeUndefined();
         });
 
-        it('with default', () => {
-            const map: Info.EnvMap<any> = {
-                production: VALUE,
-                default: VALUE_2
-            };
-
-            expect(PRODUCTION.forEnvMap(map)).toEqual(VALUE);
-            expect(DEVELOPMENT.forEnvMap(map)).toEqual(VALUE_2);
-            expect(TEST.forEnvMap(map)).toEqual(VALUE_2);
-            expect(STAGING.forEnvMap(map)).toEqual(VALUE_2);
-        });
-    });
-
-    it('forOtherThan', () => {
-        expect(PRODUCTION.forOtherThan('development')(VALUE))
-            .toEqual(VALUE);
-
-        expect(DEVELOPMENT.forOtherThan('development')(VALUE))
-            .toBeUndefined();
+        it('uses fallback value if provided', () => {
+            expect(env.forEnv(env.name)(VALUE, VALUE_2)).toEqual(VALUE);
+            expect(oppositeEnv.forEnv(env.name)(VALUE, VALUE_2)).toEqual(VALUE_2);
+        })
     });
 });

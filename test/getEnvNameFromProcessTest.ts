@@ -1,5 +1,4 @@
 import {getEnvNameFromProcess} from "@src/getEnvNameFromProcess";
-import {Env} from "@src/Env";
 
 describe('getEnvNameFromProcess', () => {
     it('using default keys: APP_ENV, NODE_ENV', () => {
@@ -11,9 +10,31 @@ describe('getEnvNameFromProcess', () => {
     });
 
 
-    it('fallback to development is missing', () => {
+    it('fallbacks to development if missing', () => {
         expect(getEnvNameFromProcess({}))
             .toEqual('development')
+    });
+
+    describe('CI', () => {
+        it('might be provided in APP_ENV', () => {
+            expect(getEnvNameFromProcess({APP_ENV: 'ci'}))
+                .toEqual('ci');
+        });
+
+        it('might be provided in NODE_ENV', () => {
+            expect(getEnvNameFromProcess({NODE_ENV: 'ci'}))
+                .toEqual('ci');
+        });
+
+        it.each([
+            ['CI'],
+            ['CONTINUOUS_INTEGRATION'],
+            ['BUILD_NUMBER'],
+            ['RUN_ID']
+        ])('to CI if ENV variable %s is present', envName => {
+            expect(getEnvNameFromProcess({[envName]: '1'}))
+                .toEqual('ci');
+        });
     });
 
     it('using provided keys', () => {
@@ -32,7 +53,6 @@ describe('getEnvNameFromProcess', () => {
     });
 
     describe('using process.env', () => {
-
         let env: typeof process['env'];
         beforeEach(() => {
             env = process.env;

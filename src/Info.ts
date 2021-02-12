@@ -7,68 +7,40 @@ export interface Info {
     isProduction: boolean;
     isDevelopment: boolean;
     isStaging: boolean;
+    isCI: boolean;
 
-    build: <T>() => Builder<T>;
+    build: () => Builder<undefined>;
 
     /**
      * Returns provided value for provided env names environment. Otherwise return undefined;
      */
-    forEnv(...names: Env[]): (<T>(value: T) => T | undefined);
+    forEnv(...names: Env[]): Info.ValueGetter;
 
     /**
-     * Returns value that matches given env key. If none matches uses `default`
+     * Returns provided value for TEST environment. Otherwise returns default value;
      */
-    forEnvMap<T>(map: Info.EnvMap<T>): T | undefined;
 
-    /**
-     * Returns provided value for env names other than provided. Otherwise return undefined;
-     */
-    forEnvOtherThan(...names: Env[]): (<T>(value: T) => T | undefined);
-
-    /**
-     * Alias for "forEnvOtherThan"
-     */
-    forOtherThan(...names: Env[]): (<T>(value: T) => T | undefined)
-
-    /**
-     * Returns provided value for TEST environment. Otherwise return undefined;
-     */
-    forTest<T>(value: T): T | undefined;
-
-    /**
-     * Returns provided value for environments other than TEST. Otherwise return undefined;
-     */
-    forOtherThanTest<T>(value: T): T | undefined;
+    forTest: Info.ValueGetter
 
     /**
      * Returns provided value for PRODUCTION environment. Otherwise return undefined;
      */
-    forProduction<T>(value: T): T | undefined;
-
-    /**
-     * Returns provided value for environments other than PRODUCTION. Otherwise return undefined;
-     */
-    forOtherThanProduction<T>(value: T): T | undefined;
+    forProduction: Info.ValueGetter
 
     /**
      * Returns provided value for DEVELOPMENT environment. Otherwise return undefined;
      */
-    forDevelopment<T>(value: T): T | undefined;
-
-    /**
-     * Returns provided value for environments other than DEVELOPMENT. Otherwise return undefined;
-     */
-    forOtherThanDevelopment<T>(value: T): T | undefined;
+    forDevelopment: Info.ValueGetter
 
     /**
      * Returns provided value for STAGING environment. Otherwise return undefined;
      */
-    forStaging<T>(value: T): T | undefined;
+    forStaging: Info.ValueGetter
 
     /**
-     * Returns provided value for environments other than STAGING. Otherwise return undefined;
+     * Returns
      */
-    forOtherThanStaging<T>(value: T): T | undefined;
+    forCI: Info.ValueGetter;
 
     /**
      * Checks if current env is one of provided env
@@ -83,4 +55,9 @@ export interface Info {
 
 export namespace Info {
     export type EnvMap<T> = Partial<Record<Env | 'default', T>>
+
+    export interface ValueGetter {
+        <T>(value: T): T | undefined;
+        <T, TDefault>(value: T, defaultValue: TDefault): T | TDefault;
+    }
 }
