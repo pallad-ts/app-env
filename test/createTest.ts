@@ -46,7 +46,6 @@ describe('create', () => {
         it('uses provided value if matches env', () => {
             expect(env.forEnv(env.name)(VALUE)).toEqual(VALUE);
             expect(oppositeEnv.forEnv(env.name)(VALUE)).toBeUndefined();
-			expect(true).toEqual(false);
         });
 
         it('uses fallback value if provided', () => {
