@@ -15,6 +15,7 @@ jobs:
       - run: npm test
       - store_test_results
       - coveralls/upload
+
 workflows:
   main:
     jobs:
