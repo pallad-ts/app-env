@@ -23,7 +23,7 @@ export class Builder<T extends NonNullable<any>> {
         return this;
     }
 
-    forEnv<TN>(names: Env[], value: TN): Builder<T | TN> {
+    forEnv<NT>(names: Env[], value: NT): Builder<T | NT> {
         return this.evalRule(this.info.is(...names), value);
     }
 
