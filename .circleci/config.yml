@@ -13,7 +13,8 @@ jobs:
       - checkout
       - node/install-packages
       - run: npm test
-      - store_test_results
+      - store_test_results:
+          path: ./
       - coveralls/upload
 
 workflows:
