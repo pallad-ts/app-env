@@ -23,27 +23,27 @@ export class Builder<T extends NonNullable<any>> {
         return this;
     }
 
-    forEnv<NT>(names: Env[], value: NT): Builder<T | NT> {
+    forEnv<TN>(names: Env[], value: TN): Builder<T | TN> {
         return this.evalRule(this.info.is(...names), value);
     }
 
-    forCI<NT>(value: NT): Builder<T | NT> {
+    forCI<TN>(value: TN): Builder<T | TN> {
         return this.evalRule(this.info.isCI, value);
     }
 
-    forProduction<NT>(value: NT): Builder<T | NT> {
+    forProduction<TN>(value: TN): Builder<T | TN> {
         return this.evalRule(this.info.isProduction, value);
     }
 
-    forTest<NT>(value: NT): Builder<T | NT> {
+    forTest<TN>(value: TN): Builder<T | TN> {
         return this.evalRule(this.info.isTest, value);
     }
 
-    forDevelopment<NT>(value: NT): Builder<T | NT> {
+    forDevelopment<TN>(value: TN): Builder<T | TN> {
         return this.evalRule(this.info.isDevelopment, value);
     }
 
-    forStaging<NT>(value: NT): Builder<T | NT> {
+    forStaging<TN>(value: TN): Builder<T | TN> {
         return this.evalRule(this.info.isStaging, value);
     }
 
@@ -51,7 +51,7 @@ export class Builder<T extends NonNullable<any>> {
         return this.value;
     }
 
-    getOrDefault<NT>(value: NT): NonNullable<T> | NT {
+    getOrDefault<TN>(value: TN): NonNullable<T> | TN {
         if (this.found) {
             return this.value as NonNullable<T>;
         }

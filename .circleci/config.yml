@@ -1,0 +1,16 @@
+version: 2.1
+
+orbs:
+  node: circleci/node@4.7
+
+workflows:
+  main:
+    jobs:
+      - node/run:
+          npm-run: lint
+      - node/test:
+          matrix:
+            parameters:
+              version:
+                - 14
+                - 16
