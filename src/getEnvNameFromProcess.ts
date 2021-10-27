@@ -1,25 +1,25 @@
 import {Env} from "./Env";
 import {isCI} from './isCI';
 
-export function getEnvNameFromProcess(env = process.env, keys: string[] = ['APP_ENV', 'NODE_ENV']): Env {
-    const candidate: string | undefined = (() => {
-        for (const envName of keys) {
-            if (env[envName]) {
-                return env[envName];
-            }
-        }
-    })();
+function fallback(env: typeof process['env']) {
+	if (isCI(env)) {
+		return 'ci';
+	}
+	return 'development';
+}
 
-    if (candidate === undefined) {
-        if (isCI(env)) {
-            return 'ci';
-        }
-        return 'development'
-    }
+export function getEnvNameFromProcess(env: typeof process['env'] = process.env, keys: string[] = ['APP_ENV', 'NODE_ENV']): Env {
+	const candidates: string[] = keys.map(x => env[x])
+		.filter(x => x) as string[];
 
-    if (Env.List.includes(candidate.trim().toLowerCase() as any)) {
-        return candidate as Env;
-    }
+	if (candidates.length === 0) {
+		return fallback(env);
+	}
 
-    return 'development';
+	for (const candidate of candidates) {
+		if (Env.List.includes(candidate.trim().toLowerCase() as any)) {
+			return candidate as Env;
+		}
+	}
+	return fallback(env);
 }

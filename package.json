@@ -1,9 +1,18 @@
 {
   "name": "@pallad/app-env",
-  "version": "3.0.1",
-  "description": "",
+  "version": "3.1.0",
+  "description": "Detects environment (production, staging, test, development, ci) and helps making decision based on that",
   "main": "compiled/index.js",
   "types": "compiled/index.d.ts",
+  "keywords": [
+    "env",
+    "environment",
+    "production",
+    "development",
+    "staging",
+    "ci",
+    "test"
+  ],
   "scripts": {
     "compile": "pallad-scripts compile",
     "test": "pallad-scripts test",
@@ -15,7 +24,9 @@
     "url": "git+https://github.com/pallad-ts/app-env.git"
   },
   "files": [
-    "compiled"
+    "compiled",
+    "docs",
+    "assets"
   ],
   "author": "Łukasz Kużyński <lukasz.kuzynski@gmail.com> (http://wookieb.pl)",
   "license": "MIT",
@@ -32,6 +43,7 @@
     "sinon": "^9"
   },
   "dependencies": {
+    "@pallad/builder": "^1.0.1",
     "ci-info": "^2.0.0",
     "ts-essentials": "^9"
   }
