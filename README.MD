@@ -13,6 +13,7 @@
 ![Example code](./assets/intro.png)
 
 Library to detect in which environment your app is working. Supports detection of following environments:
+
 - production
 - development
 - test
