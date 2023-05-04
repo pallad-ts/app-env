@@ -19,6 +19,7 @@ Library to detect in which environment your app is working. Supports detection o
 - test
 - staging
 - ci
+- preview
 
 Allows to easy change of environments through env variables.
 
@@ -55,8 +56,8 @@ npm install @pallad/app-env
 
 `@pallad/app-env` detects environment based on available env variables.
 
-1. If `APP_ENV` is supported environment name (case-insensitive) then use it, otherwise move to next step.
-2. If `NODE_ENV` is supported environment name (case-insensitive) then use it, otherwise move to next step.
+1. If `APP_ENV` env variable is supported environment name (case-insensitive) then use it, otherwise move to next step.
+2. If `NODE_ENV` env variable is supported environment name (case-insensitive) then use it, otherwise move to next step.
 3. If CI environment is detected then it is `ci`, otherwise move to next step.
 4. Fallback to `development`
 
@@ -95,6 +96,7 @@ e.isDevelopment;
 e.isStaging;
 e.isTest;
 e.isCI;
+e.isPreview;
 ```
 
 ## Flag helpers
