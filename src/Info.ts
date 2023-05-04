@@ -8,6 +8,7 @@ export interface Info {
 	isDevelopment: boolean;
 	isStaging: boolean;
 	isCI: boolean;
+	isPreview: boolean;
 
 	build: () => Builder<undefined>;
 
@@ -37,7 +38,12 @@ export interface Info {
 	forStaging: Info.ValueGetter
 
 	/**
-	 * Returns
+	 * Returns provided value for CI environment. Otherwise return undefined;
+	 */
+	forPreview: Info.ValueGetter;
+
+	/**
+	 * Returns provided value for CI environment. Otherwise return undefined;
 	 */
 	forCI: Info.ValueGetter;
 
@@ -53,8 +59,6 @@ export interface Info {
 }
 
 export namespace Info {
-	export type EnvMap<T> = Partial<Record<Env | 'default', T>>
-
 	export interface ValueGetter {
 		<T>(value: T): T | undefined;
 

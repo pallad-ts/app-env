@@ -45,6 +45,10 @@ export class Builder<T extends NonNullable<any>> extends BaseBuilder {
 		return this.evalRule(this.info.isDevelopment, value);
 	}
 
+	forPreview<TN>(value: TN): Builder<T | TN> {
+		return this.evalRule(this.info.isPreview, value);
+	}
+
 	forStaging<TN>(value: TN): Builder<T | TN> {
 		return this.evalRule(this.info.isStaging, value);
 	}

@@ -24,6 +24,7 @@ export function create(env: Env): Info {
 		isStaging: env === 'staging',
 		isCI: env === 'ci',
 		isDevelopment: env === 'development',
+		isPreview: env === 'preview',
 		forEnv,
 		build: () => {
 			return Builder.create(info);
@@ -33,6 +34,7 @@ export function create(env: Env): Info {
 		forStaging: forEnv('staging'),
 		forTest: forEnv('test'),
 		forCI: forEnv('ci'),
+		forPreview: forEnv('preview'),
 		is,
 		isEnv: is
 	};
