@@ -1,8 +1,7 @@
-import {ElementOf} from 'ts-essentials';
-
-export type Env = ElementOf<typeof Env.List>;
+export type Env<T extends string> = Lowercase<T> | Env.Name;
 
 export namespace Env {
+	export type Name = typeof List[number]
 	export const List = ['development', 'test', 'production', 'staging', 'ci', 'preview'] as const;
 
 	export enum Enum {

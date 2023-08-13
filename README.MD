@@ -21,6 +21,8 @@ Library to detect in which environment your app is working. Supports detection o
 - ci
 - preview
 
+If you need to support more environments see [#non-standard-environments](non standard environments)
+
 Allows to easy change of environments through env variables.
 
 # Use cases
@@ -154,3 +156,27 @@ const value = e.build()
 	.forEnv(['development', 'test'], 'baz')
 	.get(); // you'll get "foo" (not "baz") for development since it was first evaluated rule
 ```
+
+# Non standard environments
+
+While library by default supports most of commonly known environment names sometimes you might have special environments
+that are not covered.
+
+For such cases you can create your own configuration with custom names.
+
+```typescript
+import {Configuration} from '@pallad/app-env';
+
+const envConfig = new Configuration(['e2e', 'eu_region']);
+const info = envConfig.create('e2e');
+
+info.isEnv('e2e') // true
+info.isProduction // false
+
+envConfig.getEnvNameFromProcess(); // e2e or eu_region might be properly detected
+```
+
+Note that old environment names like production, development, CI etc are still available.
+
+Such created instance of `Configuration` allows you to create env info, value builder and detect env from environment
+variables and accepting new environment names.

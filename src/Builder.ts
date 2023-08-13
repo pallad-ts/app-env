@@ -1,17 +1,17 @@
-import {Env} from './Env';
 import {Info} from './Info';
 import {Builder as BaseBuilder} from '@pallad/builder';
+import {Env} from "./Env";
 
-export class Builder<T extends NonNullable<any>> extends BaseBuilder {
+export class Builder<T extends NonNullable<any>, TInfo extends Info<Env<string>>> extends BaseBuilder {
 	private found = false;
 	private value!: T;
 
-	constructor(readonly info: Info) {
+	constructor(readonly info: TInfo) {
 		super();
 	}
 
-	static create(info: Info) {
-		return new Builder<undefined>(info);
+	static create<TInfo extends Info<any>>(info: TInfo) {
+		return new Builder<undefined, TInfo>(info);
 	}
 
 	private evalRule(isValid: boolean, value: any): any {
@@ -25,31 +25,31 @@ export class Builder<T extends NonNullable<any>> extends BaseBuilder {
 		return this;
 	}
 
-	forEnv<TN>(names: Env[], value: TN): Builder<T | TN> {
+	forEnv<TN>(names: Array<Info.InferEnvNames<TInfo>>, value: TN): Builder<T | TN, TInfo> {
 		return this.evalRule(this.info.is(...names), value);
 	}
 
-	forCI<TN>(value: TN): Builder<T | TN> {
+	forCI<TN>(value: TN): Builder<T | TN, TInfo> {
 		return this.evalRule(this.info.isCI, value);
 	}
 
-	forProduction<TN>(value: TN): Builder<T | TN> {
+	forProduction<TN>(value: TN): Builder<T | TN, TInfo> {
 		return this.evalRule(this.info.isProduction, value);
 	}
 
-	forTest<TN>(value: TN): Builder<T | TN> {
+	forTest<TN>(value: TN): Builder<T | TN, TInfo> {
 		return this.evalRule(this.info.isTest, value);
 	}
 
-	forDevelopment<TN>(value: TN): Builder<T | TN> {
+	forDevelopment<TN>(value: TN): Builder<T | TN, TInfo> {
 		return this.evalRule(this.info.isDevelopment, value);
 	}
 
-	forPreview<TN>(value: TN): Builder<T | TN> {
+	forPreview<TN>(value: TN): Builder<T | TN, TInfo> {
 		return this.evalRule(this.info.isPreview, value);
 	}
 
-	forStaging<TN>(value: TN): Builder<T | TN> {
+	forStaging<TN>(value: TN): Builder<T | TN, TInfo> {
 		return this.evalRule(this.info.isStaging, value);
 	}
 

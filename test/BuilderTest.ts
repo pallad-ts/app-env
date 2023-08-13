@@ -1,14 +1,14 @@
 import {Builder} from '@src/Builder';
-import {create} from '@src/create';
 import {assert, IsExact} from 'conditional-type-checks';
+import {configuration} from "@src/setup";
 
 describe('Builder', () => {
-	const PRODUCTION = create('production');
-	const DEVELOPMENT = create('development');
-	const TEST = create('test');
-	const CI = create('ci');
-	const STAGING = create('staging');
-	const PREVIEW = create('preview');
+	const PRODUCTION = configuration.create('production');
+	const DEVELOPMENT = configuration.create('development');
+	const TEST = configuration.create('test');
+	const CI = configuration.create('ci');
+	const STAGING = configuration.create('staging');
+	const PREVIEW = configuration.create('preview');
 
 	const VALUE = 'foo' as const;
 	const VALUE_OTHER = 'bar' as const;
