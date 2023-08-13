@@ -21,7 +21,7 @@ Library to detect in which environment your app is working. Supports detection o
 - ci
 - preview
 
-If you need to support more environments see [#non-standard-environments](non standard environments)
+If you need to support more environments see [non standard environments](#non-standard-environments)
 
 Allows to easy change of environments through env variables.
 
