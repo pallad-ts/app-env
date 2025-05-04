@@ -1,6 +1,6 @@
 import {assert, IsExact} from "conditional-type-checks";
 import {Factory} from "../Factory";
-import {AnyInfo, Info, InfoInferEnvId, InfoInferEnvNames} from "../Info";
+import {AnyInfo, InfoInferEnvId, InfoInferEnvNames} from "../Info";
 import {Builder} from "../Builder";
 
 describe('Factory', () => {
@@ -213,7 +213,7 @@ describe('Factory', () => {
 
 	describe('environment id', () => {
 		const factory = new Factory({
-			validateEnvId: (envId) => {
+			validateEnvId: envId => {
 				return envId === 'foo' || envId === 'bar';
 			}
 		});
