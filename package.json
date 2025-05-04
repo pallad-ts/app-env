@@ -1,6 +1,6 @@
 {
   "name": "@pallad/app-env",
-  "version": "3.5.0",
+  "version": "4.0.0",
   "description": "Detects environment (production, staging, test, development, ci) and helps making decision based on that",
   "main": "compiled/index.js",
   "types": "compiled/index.d.ts",
