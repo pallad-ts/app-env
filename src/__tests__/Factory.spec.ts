@@ -1,6 +1,6 @@
 import {assert, IsExact} from "conditional-type-checks";
 import {Factory} from "../Factory";
-import {AnyInfo, Info, InfoInferEnvNames} from "../Info";
+import {AnyInfo, Info, InfoInferEnvId, InfoInferEnvNames} from "../Info";
 import {Builder} from "../Builder";
 
 describe('Factory', () => {
@@ -211,4 +211,31 @@ describe('Factory', () => {
 		})
 	});
 
+	describe('environment id', () => {
+		const factory = new Factory({
+			validateEnvId: (envId) => {
+				return envId === 'foo' || envId === 'bar';
+			}
+		});
+
+		it('validation function prevents using invalid env id', () => {
+			expect(factory.isValidEnvId('foo')).toBe(true);
+			expect(factory.isValidEnvId('bar')).toBe(true);
+		});
+
+		it('prevents creating info with invalid env id', () => {
+			expect(factory.createFromProcessEnv({APP_ENV_ID: 'test'}))
+				.toHaveProperty('id', undefined);
+		});
+
+		it('creates info with valid env id', () => {
+			expect(factory.createFromProcessEnv({APP_ENV_ID: 'foo'}))
+				.toHaveProperty('id', 'foo');
+		});
+
+		it('types', () => {
+			type EnvId = InfoInferEnvId<ReturnType<typeof factory.create>>;
+			assert<IsExact<EnvId, 'foo' | 'bar' | undefined>>(true);
+		});
+	});
 })
