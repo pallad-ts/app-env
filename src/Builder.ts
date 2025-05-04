@@ -1,17 +1,12 @@
-import {Info} from './Info';
+import {AnyInfo, Info, InfoInferEnvNames} from "./Info";
 import {Builder as BaseBuilder} from '@pallad/builder';
-import {Env} from "./Env";
 
-export class Builder<T extends NonNullable<any>, TInfo extends Info<Env<string>>> extends BaseBuilder {
+export class Builder<T = undefined, TInfo extends AnyInfo = AnyInfo> extends BaseBuilder {
 	private found = false;
 	private value!: T;
 
 	constructor(readonly info: TInfo) {
 		super();
-	}
-
-	static create<TInfo extends Info<any>>(info: TInfo) {
-		return new Builder<undefined, TInfo>(info);
 	}
 
 	private evalRule(isValid: boolean, value: any): any {
@@ -20,17 +15,17 @@ export class Builder<T extends NonNullable<any>, TInfo extends Info<Env<string>>
 		}
 		if (isValid) {
 			this.found = true;
-			this.value = value as any;
+			this.value = value instanceof Function ? value(this.info) : value;
 		}
 		return this;
 	}
 
-	forEnv<TN>(names: Array<Info.InferEnvNames<TInfo>>, value: TN): Builder<T | TN, TInfo> {
+	forEnv<TN>(names: Array<InfoInferEnvNames<TInfo>>, value: TN | ((info: TInfo) => TN)): Builder<T | TN, TInfo> {
 		return this.evalRule(this.info.is(...names), value);
 	}
 
 	forCI<TN>(value: TN): Builder<T | TN, TInfo> {
-		return this.evalRule(this.info.isCI, value);
+		return this.evalRule(this.info.isCi, value);
 	}
 
 	forProduction<TN>(value: TN): Builder<T | TN, TInfo> {

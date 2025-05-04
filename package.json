@@ -15,7 +15,7 @@
   ],
   "scripts": {
     "compile": "pallad-scripts compile",
-    "test": "pallad-scripts test",
+    "test": "jest",
     "lint": "pallad-scripts lint",
     "prepublishOnly": "npm run compile",
     "generate-barrels": "npx barrelsby -l all --delete -d ./src"
@@ -36,14 +36,13 @@
   },
   "homepage": "https://github.com/pallad-ts/app-env#readme",
   "devDependencies": {
-    "@pallad/scripts": "^3.0.2",
-    "@types/ci-info": "^2.0.0",
+    "@pallad/scripts": "^4",
+    "@types/ci-info": "^3",
     "@types/node": "^18",
     "conditional-type-checks": "^1",
-    "sinon": "^14"
+    "sinon": "^20"
   },
   "dependencies": {
-    "@pallad/builder": "^1.0.1",
-    "ci-info": "^2.0.0"
+    "@pallad/builder": "^2"
   }
 }

@@ -37,10 +37,6 @@ Allows to easy change of environments through env variables.
 * 📝 Supports wider spectrum of environments than just `production` and `development`
 * 🔥 Provides builder to easily change configs/flags/switchers in type safe manner
 
-# Community
-
-Join our [discord server](https://discord.gg/ZV4SwufSjT)
-
 # Installation
 
 ```shell

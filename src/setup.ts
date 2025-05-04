@@ -1,8 +1,9 @@
-import {Configuration} from "./Configuration";
+import {Factory} from "./Factory";
+import {InfoInferEnvNames} from "./Info";
 
-export const configuration = new Configuration([]);
+export const factory = new Factory({});
 
-export const info = configuration.create(configuration.getEnvNameFromProcess());
+export const info = factory.createFromProcessEnv();
 
 export const isProduction = info.isProduction;
 export const isDevelopment = info.isDevelopment;
@@ -14,9 +15,10 @@ export const isCi = info.isCi;
 
 export const env = info.name;
 export const name = info.name;
-
+export const id = info.id;
 export const is = info.is;
 export const isEnv = info.isEnv;
+export const isEnvId = info.isEnvId;
 export const forEnv = info.forEnv;
 export const forCI = info.forCI;
 export const forCi = info.forCi;
@@ -27,5 +29,4 @@ export const forProduction = info.forProduction;
 export const forPreview = info.forPreview;
 export const build = info.build;
 
-export const getEnvNameFromProcess = configuration.getEnvNameFromProcess;
-export const create = configuration.create;
+export type Env = InfoInferEnvNames<typeof info>;

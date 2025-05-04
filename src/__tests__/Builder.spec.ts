@@ -1,21 +1,22 @@
-import {Builder} from '@src/Builder';
 import {assert, IsExact} from 'conditional-type-checks';
-import {configuration} from "@src/setup";
+import {factory} from "../setup";
+import {Builder} from "../Builder";
+import {AnyInfo} from "../Info";
 
 describe('Builder', () => {
-	const PRODUCTION = configuration.create('production');
-	const DEVELOPMENT = configuration.create('development');
-	const TEST = configuration.create('test');
-	const CI = configuration.create('ci');
-	const STAGING = configuration.create('staging');
-	const PREVIEW = configuration.create('preview');
+	const PRODUCTION = factory.create('production');
+	const DEVELOPMENT = factory.create('development');
+	const TEST = factory.create('test');
+	const CI = factory.create('ci');
+	const STAGING = factory.create('staging');
+	const PREVIEW = factory.create('preview');
 
 	const VALUE = 'foo' as const;
 	const VALUE_OTHER = 'bar' as const;
 
 	it('forNames', () => {
 		expect(
-			Builder.create(PRODUCTION)
+			new Builder(PRODUCTION)
 				.forEnv(['development', 'production'], VALUE)
 				.get()
 		).toEqual(VALUE);
@@ -23,7 +24,7 @@ describe('Builder', () => {
 
 	it('builder returns first matching result', () => {
 		expect(
-			Builder.create(PRODUCTION)
+			new Builder(PRODUCTION)
 				.forStaging(VALUE_OTHER)
 				.forEnv(['production'], VALUE)
 				.forProduction('what?')
@@ -33,14 +34,14 @@ describe('Builder', () => {
 
 	it('default returned if none matches', () => {
 		expect(
-			Builder.create(PRODUCTION)
+			new Builder(PRODUCTION)
 				.forStaging(VALUE)
 				.forTest(VALUE)
 				.getOrDefault(VALUE_OTHER)
 		).toEqual(VALUE_OTHER);
 
 		expect(
-			Builder.create(PRODUCTION)
+			new Builder(PRODUCTION)
 				.forStaging(VALUE)
 				.forTest(VALUE)
 				.forProduction(VALUE)
@@ -50,13 +51,13 @@ describe('Builder', () => {
 
 	it('forProduction', () => {
 		expect(
-			Builder.create(PRODUCTION)
+			new Builder(PRODUCTION)
 				.forProduction(VALUE)
 				.get()
 		).toEqual(VALUE);
 
 		expect(
-			Builder.create(PRODUCTION)
+			new Builder(PRODUCTION)
 				.forDevelopment(VALUE)
 				.forStaging(VALUE)
 				.forTest(VALUE)
@@ -68,13 +69,13 @@ describe('Builder', () => {
 
 	it('forDevelopment', () => {
 		expect(
-			Builder.create(DEVELOPMENT)
+			new Builder(DEVELOPMENT)
 				.forDevelopment(VALUE)
 				.get()
 		).toEqual(VALUE);
 
 		expect(
-			Builder.create(DEVELOPMENT)
+			new Builder(DEVELOPMENT)
 				.forProduction(VALUE)
 				.forStaging(VALUE)
 				.forTest(VALUE)
@@ -86,13 +87,13 @@ describe('Builder', () => {
 
 	it('forStaging', () => {
 		expect(
-			Builder.create(STAGING)
+			new Builder(STAGING)
 				.forStaging(VALUE)
 				.get()
 		).toEqual(VALUE);
 
 		expect(
-			Builder.create(STAGING)
+			new Builder(STAGING)
 				.forDevelopment(VALUE)
 				.forProduction(VALUE)
 				.forTest(VALUE)
@@ -104,13 +105,13 @@ describe('Builder', () => {
 
 	it('forTest', () => {
 		expect(
-			Builder.create(TEST)
+			new Builder(TEST)
 				.forTest(VALUE)
 				.get()
 		).toEqual(VALUE);
 
 		expect(
-			Builder.create(TEST)
+			new Builder(TEST)
 				.forDevelopment(VALUE)
 				.forProduction(VALUE)
 				.forStaging(VALUE)
@@ -122,13 +123,13 @@ describe('Builder', () => {
 
 	it('forCI', () => {
 		expect(
-			Builder.create(CI)
+			new Builder(CI)
 				.forCI(VALUE)
 				.get()
 		).toEqual(VALUE);
 
 		expect(
-			Builder.create(CI)
+			new Builder(CI)
 				.forDevelopment(VALUE)
 				.forProduction(VALUE)
 				.forStaging(VALUE)
@@ -140,13 +141,13 @@ describe('Builder', () => {
 
 	it('forPreview', () => {
 		expect(
-			Builder.create(PREVIEW)
+			new Builder(PREVIEW)
 				.forPreview(VALUE)
 				.get()
 		).toEqual(VALUE);
 
 		expect(
-			Builder.create(PREVIEW)
+			new Builder(PREVIEW)
 				.forDevelopment(VALUE)
 				.forProduction(VALUE)
 				.forStaging(VALUE)
@@ -158,7 +159,7 @@ describe('Builder', () => {
 
 	describe('types', () => {
 		it('simple type inference', () => {
-			const value = Builder.create({} as any)
+			const value = new Builder({} as AnyInfo)
 				.forTest('bar' as const)
 				.forProduction('foo' as const)
 				.get();
@@ -167,7 +168,7 @@ describe('Builder', () => {
 		});
 
 		it('providing default removed possibility of undefined', () => {
-			const value = Builder.create({} as any)
+			const value = new Builder({} as AnyInfo)
 				.forTest('bar' as const)
 				.forProduction('foo' as const)
 				.getOrDefault('what?' as const)
