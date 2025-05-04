@@ -25,17 +25,12 @@ If you need to support more environments see [non standard environments](#non-st
 
 Allows to easy change of environments through env variables.
 
-# Use cases
-
-* changing configuration based on detected environment
-* changing application behavior for tests
-* ability to force detected env on your command
-
 # Features
 
 * 👷 Built with Typescript with full types support
 * 📝 Supports wider spectrum of environments than just `production` and `development`
 * 🔥 Provides builder to easily change configs/flags/switchers in type safe manner
+* 📝 Supports environment ID
 
 # Installation
 
@@ -158,21 +153,36 @@ const value = e.build()
 While library by default supports most of commonly known environment names sometimes you might have special environments
 that are not covered.
 
-For such cases you can create your own configuration with custom names.
+For such cases you can create your own factory with custom environment names.
 
 ```typescript
-import {Configuration} from '@pallad/app-env';
+import {Factory} from '@pallad/app-env';
 
-const envConfig = new Configuration(['e2e', 'eu_region']);
-const info = envConfig.create('e2e');
+const factory = new Factory({
+	envName: ['e2e', 'eu_region', 'production', 'staging']
+});
+const info = factory.create('e2e');
 
 info.isEnv('e2e') // true
 info.isProduction // false
 
-envConfig.getEnvNameFromProcess(); // e2e or eu_region might be properly detected
+factory.getEnvNameFromProcess(); // will resolve to custom env name
 ```
 
-Note that old environment names like production, development, CI etc are still available.
+# Environment ID
 
-Such created instance of `Configuration` allows you to create env info, value builder and detect env from environment
-variables and accepting new environment names.
+There are cases when you need to identify environment in a more unique way.
+For example preview or test environment created for pull request requires unique ID to identify it (might be PR number).
+
+For that cases getting environment ID is possible through `id` property or `factory.getEnvIdFromProcess()` method.
+
+Environment ID can be set through `APP_ENV_ID` env variable or custom ones (configured through
+FactoryConfig.envIdEnvKeys).
+
+```typescript
+
+import {id, name} from '@pallad/app-env';
+
+id; // 'PR-1234'
+name; // 'preview'
+```
