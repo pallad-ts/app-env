@@ -37,7 +37,6 @@
   "homepage": "https://github.com/pallad-ts/app-env#readme",
   "devDependencies": {
     "@pallad/scripts": "^4",
-    "@types/ci-info": "^3",
     "@types/node": "^18",
     "conditional-type-checks": "^1",
     "sinon": "^20"
